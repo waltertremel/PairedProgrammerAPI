@@ -1,14 +1,46 @@
 group 'Practice'
 version '1.0-SNAPSHOT'
 
-apply plugin: 'java'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE"
+        // if using Stub Runner (consumer side) only remove this dependency
+        classpath "org.springframework.cloud:spring-cloud-contract-gradle-plugin:1.0.4.RELEASE"
+    }
+}
 
+apply plugin: 'java'
+apply plugin: "io.spring.dependency-management"
+apply plugin: 'spring-cloud-contract'
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-contract-dependencies:1.0.4.RELEASE'
+    }
 }
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web:1.5.2.RELEASE'
+
+    testCompile 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+}
+
+// In this section you define all Spring Cloud Contract Verifier Gradle Plugin properties
+contracts {
+    packageWithBaseClasses = 'com.programmers.practice.contracts'
+    basePackageForTests = 'com.programmers.practice.contracts'
+    // fully qualified name to a class that will be the base class for your generated test classes
+}
+
