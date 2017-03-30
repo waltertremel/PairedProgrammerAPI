@@ -6,10 +6,7 @@ package com.programmers.practice.controllers;
 
 import com.programmers.practice.domain.Programmer;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
@@ -22,4 +19,9 @@ public class Programmers {
         return programmer.copy().withId(1).build();
     }
 
+    @GetMapping(path = "/programmers/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Programmer getProgrammer(@PathVariable Integer id) {
+        return Programmer.builder().withId(id).withName("programmerName").build();
+    }
 }
